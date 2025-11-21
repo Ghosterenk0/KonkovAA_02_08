@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Заказ еды</string>
+
+    <string name="log_in">Вход</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+
+    <string name="Title">Еда</string>
+    <string name="TitleName">Меню</string>
+    <string name="TitleOrder">Заказ</string>
+
+    <string name="Count">Кол-во</string>
+    <string name="Order">Заказать</string>
+
+    <string name="history">История</string>
+</resources>
