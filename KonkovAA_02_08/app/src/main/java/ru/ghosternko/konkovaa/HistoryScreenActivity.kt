@@ -24,26 +24,33 @@ class HistoryScreenActivity : AppCompatActivity() {
         val listView = findViewById<ListView>(R.id.lv_his)
 
         lifecycleScope.launch {
-            val db = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java,
-                "orders.db"
-            ).build()
+            try {
+                val db = Room.databaseBuilder(
+                    applicationContext,
+                    AppDatabase::class.java,
+                    "orders.db"
+                ).build()
 
-            val ordersDao = db.ordersDao()
-            val orders = ordersDao.getAllOrders()
-            val orderStrings = orders.map { order ->
-                "${order.id} - ${order.title} - ${order.count}"
-            }.toList()
+                val ordersDao = db.ordersDao()
 
-            val adapter = ArrayAdapter(
-                this@HistoryScreenActivity,
-                android.R.layout.simple_list_item_1,
-                orderStrings,
-            )
-            listView.adapter = adapter
+                val orders = withContext(Dispatchers.IO) {
+                    ordersDao.getAllOrders()
+                }
 
-            db.close()
+                val orderStrings = orders.map { order ->
+                    "${order.id}\n${order.title} - ${order.count}"              }
+
+                withContext(Dispatchers.Main) {
+                    val adapter = ArrayAdapter(
+                        this@HistoryScreenActivity,
+                        android.R.layout.simple_list_item_1,
+                        orderStrings
+                    )
+                    listView.adapter = adapter
+                }
+
+                db.close()
+            } catch (e: Exception) { }
         }
     }
 }
